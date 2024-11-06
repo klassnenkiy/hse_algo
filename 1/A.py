@@ -49,12 +49,12 @@ if word == 'freeze':
         print(troom)
     else:
         print(tcond)
-if word == 'heat':
+elif word == 'heat':
     if troom >= tcond:
         print(troom)
     else:
         print(tcond)
-if word == 'auto':
+elif word == 'auto':
         print(tcond)
-if word == 'fan':
+elif word == 'fan':
         print(troom)
