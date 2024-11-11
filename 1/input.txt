@@ -1,3 +1,0 @@
-https://minigoogle.com:8081/?a=b&c=d
-https://google.com/?a=b&c=d
-pikabu.ru:1213
