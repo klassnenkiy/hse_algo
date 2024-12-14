@@ -1,7 +1,6 @@
 # не решил
 import bisect
 
-
 n = int(input())
 sts = []
 for i in range(n):
