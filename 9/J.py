@@ -1,58 +1,44 @@
-def solve():
-    N, K = map(int, input().split())
-    bricks = []
+# не решил
+n, k = map(int, input().split())
+b = []
+for i in range(n):
+    Li, Ci = map(int, input().split())
+    b.append((Li, Ci - 1))
 
-    color_to_bricks = [[] for _ in range(K + 1)]
+clr_b = [[] for _ in range(k)]
+for idx, (Li, Ci) in enumerate(b):
+    clr_b[Ci].append((Li, idx + 1))
 
-    for i in range(N):
-        L, C = map(int, input().split())
-        bricks.append((L, C, i + 1))
-        color_to_bricks[C].append((L, i + 1))
+max_len = sum(Li for Li, _ in b)
 
-    max_length = sum(L for L, C, _ in bricks)
-    def can_make_layer(color_bricks, target_length):
-        b = [False] * (target_length + 1)
-        b[0] = True
+dp = [[False] * (max_len + 1) for _ in range(k)]
+dp[0][0] = True
 
-        for length, _ in color_bricks:
-            for t in range(target_length, length - 1, -1):
-                if b[t - length]:
-                    b[t] = True
-        return b[target_length]
+for clr in range(k):
+    for Li, _ in clr_b[clr]:
+        for j in range(max_len, Li - 1, -1):
+            if dp[clr][j - Li]:
+                dp[clr][j] = True
 
-    can = [True] * (max_length + 1)
-    can[0] = False
-
-    for color in range(1, K + 1):
-        color_bricks = color_to_bricks[color]
-        target_length = sum(length for length, _ in color_bricks)
-
-        if not can_make_layer(color_bricks, target_length):
-            print("NO")
-            return
-
-        b = [False] * (max_length + 1)
-        b[0] = True
-        for length, _ in color_bricks:
-            for t in range(max_length, length - 1, -1):
-                if b[t - length]:
-                    b[t] = True
-
-        for j in range(max_length + 1):
-            can[j] = can[j] and b[j]
-
-    f = False
-    for i in range(max_length, 0, -1):
-        if can[i]:
-            f = True
-            v = i
+for v in range(1, max_len):
+    f = True
+    for clr in range(k):
+        if not dp[clr][v]:
+            f = False
             break
-
     if f:
-        print("YES")
-        print(v)
-    else:
-        print("NO")
+        print('YES')
 
+        wall_1 = []
+        remain_len = v
+        for clr in range(k - 1, -1, -1):
+            for Li, idx in reversed(clr_b[clr]):
+                if remain_len >= Li and dp[clr][remain_len - Li]:
+                    wall_1.append(idx)
+                    remain_len -= Li
+                    break
 
-solve()
+        print(*sorted(wall_1))
+        exit()
+
+print('NO')
